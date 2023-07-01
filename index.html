@@ -10,7 +10,7 @@ body {
 
 	background-color: #DDDDDD;
 	user-select: none;
-	background-image: url('holes.webp');
+	background-color: rgb(36, 215, 36);
 }
 
 body div {
@@ -31,22 +31,60 @@ p {
 	margin-top: 5px;
 }
 
+#buto {
+	margin: auto;
+	font-weight: bold;
+	font-size: medium;
+}
+
+article	 {
+	margin: auto;
+	width: fit-content;
+}
+
+h2 {
+	text-align: center;
+}
+
+input {
+	margin: auto;
+}
 </style>
+<script id="storeScore" type="text/javascript" src="./playground-2.mongodb.js"></script>
 </head>
 
 <body unselectable="on">
 	<div>
-		<h1>Impossi-Mole</h1>
+		<h1>Impossi-Mole</h1><br>
+		<h2><span id="timeT"><span id="minutes">00</span>:<span id="seconds">00</span></h2>
+		<article>
+			<button id="buto" onclick="clockStart()"><span id='bText'>Start</span></button><br><br>
+		</article>
 		<canvas id="dunno"></canvas>
-		<p>Level: <span id='score'>1</span></p>
+
+		<div id="infoForm">
+			<input id="name" type="text" placeholder="Name">
+			<input id="sub" type="submit" value="Save my score" onclick="storeScore()">
+		</div>
+
+		<h2><spam id="endT"></spam></h2>
+		<p id="levelT">Level: <span id='score'>1</span></p>
 	</div>
 </body>
 <script>
 
 var c = document.getElementById('dunno');
+c.style.display = "none";
+var z = document.getElementById('levelT');
+var h = document.getElementById('endT');
+var f = document.getElementById('timeT');
+f.style.display = "none";
+document.getElementById('infoForm').style.display = "none";
 var SIZE = 400;
+var STARTSIZE = 100
 var RADIUS = 50;
-c.width  = SIZE;
+
+c.width = SIZE;
 c.height = SIZE;
 
 var x = 0;
@@ -58,6 +96,54 @@ var gy = 0;
 var score = 1;
 
 var g = c.getContext('2d');
+
+	var seconds = "00";
+	var minutes = "00";	
+
+	var appendMinutes = document.getElementById("minutes");
+  	var appendSeconds = document.getElementById("seconds");
+	var Interval ;
+
+function clockStart() {
+
+	var x = document.getElementById("dunno");
+	var but = document.getElementById("buto");
+
+	but.innerHTML = "Restart";
+
+  if (x.style.display === "block") {
+    window.location.reload();
+  } else {
+    x.style.display = "block";
+	f.style.display = "block";
+
+	Interval = setInterval(startTimer, 1000);
+  }
+}
+
+function startTimer() {
+	seconds++;
+    
+    if(seconds <= 9){
+      appendSeconds.innerHTML = "0" + seconds;
+    }
+    
+    if (seconds > 9){
+      appendSeconds.innerHTML = seconds;
+    }
+  
+    if (seconds > 59) {
+      console.log("minutes");
+      minutes++;
+      appendMinutes.innerHTML = "0" + minutes;
+      seconds = 0;
+      appendSeconds.innerHTML = "0" + 0;
+    }
+    if (minutes > 9){
+      appendMinutes.innerHTML = minutes;
+    }
+  }
+
 
 function dist(x1, y1, x2, y2) {
 	var dx = x1-x2;
@@ -90,13 +176,21 @@ function drawGame() {
 	g.fillStyle = 'rgba('+darkness+', '+darkness+', 255, 0.2)';
 	g.fillRect(0, 0, SIZE, SIZE);
 
-	if (RADIUS > 0) {
+	if (RADIUS > 30) {
 		drawThing();
 	}
 	else {
+
+		var but = document.getElementById("buto");
+
 		g.fillStyle = 'black';
 		g.font = '40px Arial';
-		g.fillText('THE END. You Won!', 10, 70);
+		c.style.display = "none";
+		z.style.display = "none";
+		h.innerHTML = `Game over!`;
+		clearInterval(Interval);
+		but.style.display = "none";
+		document.getElementById('infoForm').style.display = "block";
 	}
 }
 
