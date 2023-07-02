@@ -1,56 +1,57 @@
 <html>
+
 <head>
-<title>Online Impossi-Mole</title>
-<style>
+	<title>Online Impossi-Mole</title>
+	<style>
+		body {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 
-body {
-	display: flex;
-	align-items: center;
-	justify-content: center;
+			background-color: #DDDDDD;
+			user-select: none;
+			background-color: rgb(36, 215, 36);
+		}
 
-	background-color: #DDDDDD;
-	user-select: none;
-	background-color: rgb(36, 215, 36);
-}
+		body div {
+			border: 1px solid gray;
+			padding: 10px;
+			border-radius: 6px;
+			background-color: gray;
+		}
 
-body div {
-	border: 1px solid gray;
-	padding: 10px;
-	border-radius: 6px;
-	background-color: gray;
-}
+		h1,
+		p {
+			margin: 0px;
+			text-align: center;
+			font-family: sans-serif;
+			margin-bottom: 5px;
+		}
 
-h1, p {
-	margin: 0px;
-	text-align: center;
-	font-family: sans-serif;
-	margin-bottom: 5px;
-}
+		p {
+			margin-top: 5px;
+		}
 
-p {
-	margin-top: 5px;
-}
+		#buto {
+			margin: auto;
+			font-weight: bold;
+			font-size: medium;
+		}
 
-#buto {
-	margin: auto;
-	font-weight: bold;
-	font-size: medium;
-}
+		article {
+			margin: auto;
+			width: fit-content;
+		}
 
-article	 {
-	margin: auto;
-	width: fit-content;
-}
+		h2 {
+			text-align: center;
+		}
 
-h2 {
-	text-align: center;
-}
-
-input {
-	margin: auto;
-}
-</style>
-<script id="storeScore" type="text/javascript" src="./playground-2.mongodb.js"></script>
+		input {
+			margin: auto;
+		}
+	</style>
+	<script id="storeScore" type="text/javascript" src="./playground-2.mongodb.js"></script>
 </head>
 
 <body unselectable="on">
@@ -67,159 +68,162 @@ input {
 			<input id="sub" type="submit" value="Save my score" onclick="storeScore()">
 		</div>
 
-		<h2><spam id="endT"></spam></h2>
+		<h2>
+			<spam id="endT"></spam>
+		</h2>
 		<p id="levelT">Level: <span id='score'>1</span></p>
 	</div>
 </body>
 <script>
 
-var c = document.getElementById('dunno');
-c.style.display = "none";
-var z = document.getElementById('levelT');
-var h = document.getElementById('endT');
-var f = document.getElementById('timeT');
-f.style.display = "none";
-document.getElementById('infoForm').style.display = "none";
-var SIZE = 400;
-var STARTSIZE = 100
-var RADIUS = 50;
+	var c = document.getElementById('dunno');
+	c.style.display = "none";
+	var z = document.getElementById('levelT');
+	var h = document.getElementById('endT');
+	var f = document.getElementById('timeT');
+	f.style.display = "none";
+	document.getElementById('infoForm').style.display = "none";
+	var SIZE = 400;
+	var STARTSIZE = 100
+	var RADIUS = 50;
 
-c.width = SIZE;
-c.height = SIZE;
+	c.width = SIZE;
+	c.height = SIZE;
 
-var x = 0;
-var y = 0;
+	var x = 0;
+	var y = 0;
 
-var gx = 0;
-var gy = 0;
+	var gx = 0;
+	var gy = 0;
 
-var score = 1;
+	var score = 1;
 
-var g = c.getContext('2d');
+	var g = c.getContext('2d');
 
 	var seconds = "00";
-	var minutes = "00";	
+	var minutes = "00";
 
 	var appendMinutes = document.getElementById("minutes");
-  	var appendSeconds = document.getElementById("seconds");
-	var Interval ;
+	var appendSeconds = document.getElementById("seconds");
+	var Interval;
 
-function clockStart() {
+	function clockStart() {
 
-	var x = document.getElementById("dunno");
-	var but = document.getElementById("buto");
-
-	but.innerHTML = "Restart";
-
-  if (x.style.display === "block") {
-    window.location.reload();
-  } else {
-    x.style.display = "block";
-	f.style.display = "block";
-
-	Interval = setInterval(startTimer, 1000);
-  }
-}
-
-function startTimer() {
-	seconds++;
-    
-    if(seconds <= 9){
-      appendSeconds.innerHTML = "0" + seconds;
-    }
-    
-    if (seconds > 9){
-      appendSeconds.innerHTML = seconds;
-    }
-  
-    if (seconds > 59) {
-      console.log("minutes");
-      minutes++;
-      appendMinutes.innerHTML = "0" + minutes;
-      seconds = 0;
-      appendSeconds.innerHTML = "0" + 0;
-    }
-    if (minutes > 9){
-      appendMinutes.innerHTML = minutes;
-    }
-  }
-
-
-function dist(x1, y1, x2, y2) {
-	var dx = x1-x2;
-	var dy = y1-y2;
-	return Math.sqrt(dx*dx + dy*dy);
-}
-
-function drawThing() {
-	if (dist(x, y, gx, gy) < 2) {
-		gx = Math.random() * (SIZE - 2*RADIUS) + RADIUS;
-		gy = Math.random() * (SIZE - 2*RADIUS) + RADIUS;
-	}
-	x += .1 * (gx - x);
-	y += .1 * (gy - y);
-
-	g.fillStyle = 'red';
-	g.beginPath();
-	g.ellipse(gx, gy, 3, 3, 0, 0, Math.PI*2);
-	g.fill();
-
-	g.fillStyle = 'blue';
-	g.beginPath();
-	g.ellipse(x, y, RADIUS, RADIUS, 0, 0, Math.PI*2);
-	g.fill();
-}
-
-function drawGame() {
-	darkness = 50 + 3*RADIUS;
-
-	g.fillStyle = 'rgba('+darkness+', '+darkness+', 255, 0.2)';
-	g.fillRect(0, 0, SIZE, SIZE);
-
-	if (RADIUS > 30) {
-		drawThing();
-	}
-	else {
-
+		var x = document.getElementById("dunno");
 		var but = document.getElementById("buto");
 
-		g.fillStyle = 'black';
-		g.font = '40px Arial';
-		c.style.display = "none";
-		z.style.display = "none";
-		h.innerHTML = `Game over!`;
-		clearInterval(Interval);
-		but.style.display = "none";
-		document.getElementById('infoForm').style.display = "block";
+		but.innerHTML = "Restart";
+
+		if (x.style.display === "block") {
+			window.location.reload();
+		} else {
+			x.style.display = "block";
+			f.style.display = "block";
+
+			Interval = setInterval(startTimer, 1000);
+		}
 	}
-}
 
-drawGame();
-window.setInterval(drawGame, (1000/60));
+	function startTimer() {
+		seconds++;
 
-c.addEventListener('click', function(event) {
-	var rect = c.getBoundingClientRect();
-	var mx   = event.clientX - rect.left;
-	var my   = event.clientY - rect.top;
+		if (seconds <= 9) {
+			appendSeconds.innerHTML = "0" + seconds;
+		}
 
-	var dx = mx - x;
-	var dy = my - y;
+		if (seconds > 9) {
+			appendSeconds.innerHTML = seconds;
+		}
 
-	var hit = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) < RADIUS;
-	if (hit) {
-		score  += 1;
-		RADIUS -= 5;
-		document.getElementById('score').innerHTML = score;
+		if (seconds > 59) {
+			console.log("minutes");
+			minutes++;
+			appendMinutes.innerHTML = "0" + minutes;
+			seconds = 0;
+			appendSeconds.innerHTML = "0" + 0;
+		}
+		if (minutes > 9) {
+			appendMinutes.innerHTML = minutes;
+		}
 	}
-	else {
-		x = Math.random() * (SIZE - 2*RADIUS) + RADIUS;
-		y = Math.random() * (SIZE - 2*RADIUS) + RADIUS;
-		gx = Math.random() * (SIZE - 2*RADIUS) + RADIUS;
-		gy = Math.random() * (SIZE - 2*RADIUS) + RADIUS;
-		g.fillStyle = 'white';
+
+
+	function dist(x1, y1, x2, y2) {
+		var dx = x1 - x2;
+		var dy = y1 - y2;
+		return Math.sqrt(dx * dx + dy * dy);
+	}
+
+	function drawThing() {
+		if (dist(x, y, gx, gy) < 2) {
+			gx = Math.random() * (SIZE - 2 * RADIUS) + RADIUS;
+			gy = Math.random() * (SIZE - 2 * RADIUS) + RADIUS;
+		}
+		x += .1 * (gx - x);
+		y += .1 * (gy - y);
+
+		g.fillStyle = 'red';
+		g.beginPath();
+		g.ellipse(gx, gy, 3, 3, 0, 0, Math.PI * 2);
+		g.fill();
+
+		g.fillStyle = 'blue';
+		g.beginPath();
+		g.ellipse(x, y, RADIUS, RADIUS, 0, 0, Math.PI * 2);
+		g.fill();
+	}
+
+	function drawGame() {
+		darkness = 50 + 3 * RADIUS;
+
+		g.fillStyle = 'rgba(' + darkness + ', ' + darkness + ', 255, 0.2)';
 		g.fillRect(0, 0, SIZE, SIZE);
+
+		if (RADIUS > 30) {
+			drawThing();
+		}
+		else {
+
+			var but = document.getElementById("buto");
+
+			g.fillStyle = 'black';
+			g.font = '40px Arial';
+			c.style.display = "none";
+			z.style.display = "none";
+			h.innerHTML = `Game over!`;
+			clearInterval(Interval);
+			but.style.display = "none";
+			document.getElementById('infoForm').style.display = "block";
+		}
 	}
-});
+
+	drawGame();
+	window.setInterval(drawGame, (1000 / 60));
+
+	c.addEventListener('click', function (event) {
+		var rect = c.getBoundingClientRect();
+		var mx = event.clientX - rect.left;
+		var my = event.clientY - rect.top;
+
+		var dx = mx - x;
+		var dy = my - y;
+
+		var hit = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2)) < RADIUS;
+		if (hit) {
+			score += 1;
+			RADIUS -= 5;
+			document.getElementById('score').innerHTML = score;
+		}
+		else {
+			x = Math.random() * (SIZE - 2 * RADIUS) + RADIUS;
+			y = Math.random() * (SIZE - 2 * RADIUS) + RADIUS;
+			gx = Math.random() * (SIZE - 2 * RADIUS) + RADIUS;
+			gy = Math.random() * (SIZE - 2 * RADIUS) + RADIUS;
+			g.fillStyle = 'white';
+			g.fillRect(0, 0, SIZE, SIZE);
+		}
+	});
 
 </script>
+
 </html>
